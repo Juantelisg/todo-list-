@@ -11,6 +11,7 @@ const defaultTodos = [
   {text: 'Pasar Algebraaa', completed: false},
   {text: 'Pasar IPC', completed: false},
   {text: 'Avanzar', completed: false},
+  
 ]
 
 function App() {
