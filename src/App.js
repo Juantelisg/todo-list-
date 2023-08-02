@@ -6,7 +6,7 @@ import { CreateTodoButton } from './CreateTodoButton';
 
 import React from 'react';
 
-const defaultTodos = [
+ /* const defaultTodos = [
   {text: 'Tejones 1', completed: true},
   {text: 'Gargolas', completed: false},
   {text: 'Panteras', completed: false},
@@ -16,13 +16,42 @@ const defaultTodos = [
   {text: 'Conquistadores', completed: false},
   {text: 'Semis', completed: false},
   {text: 'Final', completed: false}
-]
+]   */
 
-function App() {
-  const [todos, setTodos] = React.useState([...defaultTodos])
+function useLocalStorage(itemName, initialValue) {  
+
+  const localStorageItem = localStorage.getItem(itemName)
+
+  let parsedItem; 
+
+  if (!localStorageItem) {
+    localStorage.setItem(itemName, JSON.stringify(initialValue));
+    parsedItem = initialValue;
+  } else {
+    parsedItem = JSON.parse(localStorageItem);
+  }
+
+  const [item, setItem] = React.useState(parsedItem);
+
+  const saveItem = (newItem) => {
+    localStorage.setItem(itemName, JSON.stringify(newItem))
+    setItem(newItem)
+  } 
+
+  return [item, saveItem]; 
+}
+
+function App() { 
+
+  const [todos, saveTodos] = useLocalStorage('TODOS_V1', [])
+
   const [searchValue, setSearchValue] = React.useState('');
-  const completedTodos = defaultTodos.filter(todo => todo.completed).length
+
+  const completedTodos = todos.filter(
+    (todo) => !!todo.completed).length;
+
   const totalTodos = todos.length;
+  
   const searchedTodos = todos.filter(
     (todo) => {
       const todoText = todo.text.toLowerCase();
@@ -37,7 +66,7 @@ function App() {
      (todo) => todo.text == text
     );
     newTodos[todoIndex].completed = true;
-    setTodos(newTodos);
+    saveTodos(newTodos);
   }
 
   const notCompletedTodo = (text) => {    
@@ -48,7 +77,7 @@ function App() {
 
     if (newTodos[todoIndex].completed) {
         newTodos[todoIndex].completed = false;
-        setTodos(newTodos);
+        saveTodos(newTodos);
     } else {   
       deleteTodo(text)      
     }
@@ -61,7 +90,7 @@ function App() {
       (todo) => todo.text !== text
     );
        
-    setTodos(updatesTodo)      
+    saveTodos(updatesTodo)      
   } 
 
   return (
