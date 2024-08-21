@@ -4,7 +4,7 @@ import './TodoSearch.css'
 function TodoSearch({searchValue, setSearchValue}) {        
     return (
      <input 
-        placeholder="Buscar" 
+        placeholder="Search" 
         value={searchValue}
         className='TodoSearch'     
         onChange={(event) => {
@@ -12,6 +12,6 @@ function TodoSearch({searchValue, setSearchValue}) {
         }}
      />
     )
-}
+} 
 
 export { TodoSearch };
